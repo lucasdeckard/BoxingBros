@@ -1,6 +1,5 @@
 import pygame
 import random
-import sys
 
 pygame.init()
 
@@ -69,9 +68,15 @@ def check_collision():
         enemy_health -= 10
 
 def losescreen():
-    run = True
-    while run:
-        ends = pygame.display.set_mode((1280, 720))
+    global running
+    screen.fill('black')
+    draw_text("You LOSE, Click SPACE to Play Again or ESCAPE to Return to the Menu", (255, 255, 255), screen_width // 2, screen_height // 2)
+
+def winscreen():
+    global running
+    screen.fill('black')
+    draw_text("You WIN, Click SPACE to Play Again or ESCAPE to Return to the Menu", (255, 255, 255), screen_width // 2, screen_height // 2)
+        
         
 # load the music and play it
 #pygame.mixer.music.load("punchout.wav")
@@ -122,6 +127,10 @@ while running:
                 player_block = True
                 playerat = False
                 player_y = player_original_y
+            if event.key == pygame.K_SPACE:
+                reset_game()
+            if event.key == pygame.K_ESCAPE:
+                running = False
         if event.type == pygame.KEYUP:
             player_image = pygame.image.load("BoxingBros/assets/boxer-stand.png")
             player_block = False
@@ -166,14 +175,8 @@ while running:
 
     # check for the end of game scenario
     if enemy_health < 1:
-        draw_text("You Win, Click Any Key to Play Again", (255, 255, 255), screen_width // 2, screen_height // 2)
-        pygame.display.update()
-        pygame.time.wait(2000)
-        reset_game()
+        winscreen()
     elif player_health < 1:
-        draw_text("You Lose, Click Any Key to Play Again", (255, 255, 255), screen_width // 2, screen_height // 2)
-        pygame.display.update()
-        pygame.time.wait(2000)
-        reset_game()
+        losescreen()
     pygame.display.update()
 pygame.quit()
